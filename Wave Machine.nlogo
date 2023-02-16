@@ -1,9 +1,16 @@
+globals[rain]
+breed [sheeps sheep]
+sheeps-own [energy]
 patches-own [biomass]
 
+;initialize simulation
 to setup
   clear-all
   ask patches [init-patch]
   reset-ticks
+  set-default-shape sheeps "sheep 2"; set default shape for sheeps
+  create-sheeps nb-sheeps [init-sheep]
+  set max-sheep-energy 10
 end
 
 to init-patch
@@ -15,15 +22,40 @@ to-report compute-green [min-value max-value]
   report scale-color green min-value max-value 0
 end
 
+
+to go
+  do-rain
+  ask patches [grow-patch]
+  tick
+end
+
+to do-rain
+  ifelse rain?[set rain random-float 0.1] [set rain 0.05]
+end
+
+to grow-patch
+  if biomass < max-biomass [set biomass biomass + rain
+   set pcolor compute-green biomass max-biomass
+  ]
+end
+
+;for sheep
+to init-sheep
+  setxy random-xcor random-ycor
+  set size 7
+  set energy random max-sheep-energy
+  set color white
+  set label-color random max-sheep-energy
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-299
+407
 10
-793
+901
 505
 -1
 -1
-6
+6.0
 1
 10
 1
@@ -41,13 +73,13 @@ GRAPHICS-WINDOW
 1
 1
 ticks
-30
+30.0
 
 BUTTON
-71
-41
-149
-74
+107
+34
+185
+67
 NIL
 setup
 NIL
@@ -61,10 +93,10 @@ NIL
 1
 
 BUTTON
-152
-41
-229
-74
+188
+34
+265
+67
 NIL
 go
 T
@@ -84,43 +116,109 @@ TEXTBOX
 112
 Biomass settings
 11
-0
-0
-
-TEXTBOX
-10
-170
-100
-188
-Driver settings
-11
-0
+0.0
 0
 
 TEXTBOX
+16
+157
+106
+175
+Rain settings
 11
-306
-132
+0.0
+0
+
+TEXTBOX
+22
 324
+143
+342
 Display settings
 11
-0
+0.0
 0
 
 SLIDER
-25
-120
-195
-153
+19
+110
+189
+143
 max-biomass
 max-biomass
 0
 50
-50
+33.0
 1
 1
 kg
 HORIZONTAL
+
+SWITCH
+29
+183
+132
+216
+rain?
+rain?
+0
+1
+-1000
+
+PLOT
+23
+353
+223
+503
+plot 1
+ticks
+biomass
+0.0
+10.0
+0.0
+200.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -1184463 true "" "histogram[biomass] of patches"
+
+INPUTBOX
+17
+244
+147
+304
+max-sheep-energy
+10.0
+1
+0
+Number
+
+SLIDER
+154
+245
+326
+278
+nb-sheeps
+nb-sheeps
+0
+100
+25.0
+1
+1
+NIL
+HORIZONTAL
+
+TEXTBOX
+18
+224
+168
+242
+Sheep settings
+12
+0.0
+1
+
 @#$#@#$#@
 ## WHAT IS IT?
 
@@ -406,6 +504,19 @@ Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
+sheep 2
+false
+0
+Polygon -7500403 true true 209 183 194 198 179 198 164 183 164 174 149 183 89 183 74 168 59 198 44 198 29 185 43 151 28 121 44 91 59 80 89 80 164 95 194 80 254 65 269 80 284 125 269 140 239 125 224 153 209 168
+Rectangle -7500403 true true 180 195 195 225
+Rectangle -7500403 true true 45 195 60 225
+Rectangle -16777216 true false 180 225 195 240
+Rectangle -16777216 true false 45 225 60 240
+Polygon -7500403 true true 245 60 250 72 240 78 225 63 230 51
+Polygon -7500403 true true 25 72 40 80 42 98 22 91
+Line -16777216 false 270 137 251 122
+Line -16777216 false 266 90 254 90
+
 square
 false
 0
@@ -496,22 +607,22 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 default
-0
--0.2 0 0 1
-0 1 1 0
-0.2 0 0 1
+0.0
+-0.2 0 0.0 1.0
+0.0 1 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-
+0
 @#$#@#$#@
