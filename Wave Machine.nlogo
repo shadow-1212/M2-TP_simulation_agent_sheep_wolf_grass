@@ -57,7 +57,7 @@ to init-sheep
   setxy random-xcor random-ycor
   set size 4
   set energy random max-sheep-energy
-  set color white
+  set color gray
   set label-color black
   set sheep-need 5
 end
@@ -111,7 +111,7 @@ to init-wolf
   setxy random-xcor random-ycor
   set size 4
   set energy random max-wolf-energy
-  set color gray
+  set color black
   set label-color white
   set wolf-need 10
 end
@@ -121,6 +121,7 @@ end
 to wolf-move
   ; get all sheeps inside the circle of vision of the wolf
   let candidates sheeps in-radius wolf-vision
+  create-links-to candidates [set color red ]
   ;move the wolf to the closest sheep if he get more hungry
   ifelse energy < max-wolf-energy and any? candidates
   [move-to min-one-of candidates [energy] ]
