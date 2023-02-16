@@ -121,6 +121,7 @@ end
 to wolf-move
   ; get all sheeps inside the circle of vision of the wolf
   let candidates sheeps in-radius wolf-vision
+
   ;move the wolf to the closest sheep if he get more hungry
   ifelse energy < max-wolf-energy and any? candidates
   [move-to min-one-of candidates [energy] ]
